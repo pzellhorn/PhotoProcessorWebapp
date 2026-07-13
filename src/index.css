@@ -1,0 +1,354 @@
+:root {
+    color-scheme: dark;
+    --bg: #16181d;
+    --surface: #1f2229;
+    --surface-hover: #262a33;
+    --border: #2e333e;
+    --text: #e8eaf0;
+    --text-muted: #9aa1b0;
+    --accent: #4f8cff;
+    --danger: #e5534b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+.app-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.app-title {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.app-header nav {
+    display: flex;
+    gap: 1rem;
+}
+
+.app-header nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.app-header nav a.active {
+    color: var(--text);
+    background: var(--surface-hover);
+}
+
+.app-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+h1 {
+    font-size: 1.4rem;
+    margin: 0.25rem 0 0;
+}
+
+a {
+    color: var(--accent);
+}
+
+.muted {
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.error-text {
+    color: var(--danger);
+}
+
+button {
+    background: var(--surface-hover);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+button:hover:not(:disabled) {
+    border-color: var(--text-muted);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+button.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+button.danger {
+    background: transparent;
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+input[type="text"],
+select {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+}
+
+/* Gallery */
+
+.dropzone {
+    position: relative;
+    min-height: 60vh;
+}
+
+.dropzone-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(22, 24, 29, 0.85);
+    border: 2px dashed var(--accent);
+    color: var(--accent);
+    font-size: 1.3rem;
+    pointer-events: none;
+}
+
+.img-fallback {
+    width: 100%;
+    height: 100%;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-hover);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+}
+
+.photo-card {
+    display: block;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--surface);
+    aspect-ratio: 1;
+}
+
+.video-play-glyph {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-40%, -50%);
+    font-size: 2rem;
+    color: #fff;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
+    pointer-events: none;
+}
+
+.video-duration {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 0.75rem;
+    pointer-events: none;
+}
+
+.photo-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.15s ease;
+}
+
+.photo-card:hover img {
+    transform: scale(1.04);
+}
+
+.photo-full {
+    max-width: 100%;
+    max-height: 75vh;
+    border-radius: 10px;
+    display: block;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+/* Jobs */
+
+.job-chips {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chip {
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+}
+
+.chip-done {
+    color: #6fce8f;
+    border-color: #6fce8f;
+}
+
+.chip-failed {
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+.chip-running,
+.chip-queued {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* People */
+
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chip-toggle {
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+}
+
+.chip-toggle.active {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: rgba(79, 140, 255, 0.1);
+}
+
+
+.identity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.75rem;
+}
+
+.identity-card {
+    display: block;
+    background: var(--surface);
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text);
+}
+
+.identity-card:hover {
+    background: var(--surface-hover);
+}
+
+.identity-card img,
+.face-placeholder {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    background: var(--surface-hover);
+}
+
+.identity-card-info {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0.75rem;
+}
+
+.identity-label {
+    font-weight: 600;
+}
+
+.person-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.rename-form,
+.merge-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.face-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+}
+
+.face-card {
+    display: block;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--surface);
+    aspect-ratio: 1;
+}
+
+.face-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
