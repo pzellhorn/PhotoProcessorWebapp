@@ -12,6 +12,8 @@ export function useSearch(text, count = 24) {
         mediaItemId: result.mediaId,
         mediaType: result.mediaType,
         durationMs: result.durationMs,
+        parentMediaId: result.parentMediaId,
+        timestampMs: result.timestampMs,
         distance: result.distance,
       }));
     },

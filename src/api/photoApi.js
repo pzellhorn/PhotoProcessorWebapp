@@ -7,6 +7,9 @@ export const photoApi = {
     return httpClient.postForm("/api/Photo/Upload", formData);
   },
 
+  listLibrary: (page, pageSize) =>
+    httpClient.get("/api/Photo/ListLibrary", { page, pageSize }),
+
   downloadUrl: (mediaId) => httpClient.url("/api/Photo/Download", { mediaId }),
 
   thumbnailUrl: (mediaId, width = 320) =>

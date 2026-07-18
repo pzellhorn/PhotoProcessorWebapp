@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import Hls from "hls.js";
 
-export default function VideoPlayer({ src, poster }) {
+export default function VideoPlayer({ src, poster, startAt }) {
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -20,6 +20,23 @@ export default function VideoPlayer({ src, poster }) {
       video.src = src;
     }
   }, [src]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || startAt == null) return;
+
+    function seek() {
+      video.currentTime = startAt;
+    }
+
+    if (video.readyState >= 1) {
+      seek();
+      return;
+    }
+
+    video.addEventListener("loadedmetadata", seek);
+    return () => video.removeEventListener("loadedmetadata", seek);
+  }, [src, startAt]);
 
   return (
     <video ref={videoRef} className="video-player" controls poster={poster} />

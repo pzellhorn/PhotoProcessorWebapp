@@ -7,11 +7,12 @@ import {
 import { mediaItemApi } from "../api/entityApis";
 import { photoApi } from "../api/photoApi";
 import { videoApi } from "../api/videoApi";
+import { RESUMABLE_THRESHOLD, uploadResumable } from "../api/resumableUpload";
 
 export function useMediaItemPage(page, pageSize) {
   return useQuery({
     queryKey: ["mediaItems", page, pageSize],
-    queryFn: () => mediaItemApi.list(page, pageSize),
+    queryFn: () => photoApi.listLibrary(page, pageSize),
     placeholderData: keepPreviousData,
   });
 }
@@ -36,10 +37,19 @@ export function useUploadPhotos() {
     mutationFn: async ({ files, onProgress }) => {
       const results = [];
       for (let i = 0; i < files.length; i++) {
-        onProgress?.(i, files.length);
         const file = files[i];
-        const api = file.type.startsWith("video/") ? videoApi : photoApi;
-        results.push(await api.upload(file));
+        onProgress?.(i, files.length, 0);
+
+        if (file.size >= RESUMABLE_THRESHOLD) {
+          results.push(
+            await uploadResumable(file, (sent, total) =>
+              onProgress?.(i, files.length, total ? sent / total : 0),
+            ),
+          );
+        } else {
+          const api = file.type.startsWith("video/") ? videoApi : photoApi;
+          results.push(await api.upload(file));
+        }
       }
       return results;
     },

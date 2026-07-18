@@ -27,7 +27,7 @@ export default function UploadButton({ upload, progress }) {
         onClick={() => inputRef.current?.click()}
       >
         {upload.isPending
-          ? `Uploading ${progress.done + 1}/${progress.total}…`
+          ? `Uploading ${progress.done + 1}/${progress.total}${progress.fraction > 0 ? ` — ${Math.round(progress.fraction * 100)}%` : ""}…`
           : "Upload media"}
       </button>
       {upload.isError && (

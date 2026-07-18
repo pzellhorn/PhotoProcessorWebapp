@@ -1,4 +1,10 @@
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { photoApi } from "../api/photoApi";
 import { videoApi } from "../api/videoApi";
 import { useJobsForMedia } from "../hooks/useJobs";
@@ -15,6 +21,8 @@ export default function PhotoPage() {
   const { mediaId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const startAt = searchParams.has("t") ? Number(searchParams.get("t")) : null;
   const { data: jobs } = useJobsForMedia(mediaId);
   const { data: mediaItem } = useMediaItem(mediaId);
   const deletePhoto = useDeletePhoto();
@@ -73,6 +81,7 @@ export default function PhotoPage() {
           <VideoPlayer
             src={videoApi.streamUrl(mediaId, masterRendition.assetPath)}
             poster={photoApi.thumbnailUrl(mediaId, 640)}
+            startAt={startAt}
           />
         ) : (
           <div className="video-processing">
@@ -81,7 +90,9 @@ export default function PhotoPage() {
               src={photoApi.thumbnailUrl(mediaId, 640)}
               alt=""
             />
-            <p className="muted">Transcoding… the player appears when it's ready.</p>
+            <p className="muted">
+              Transcoding… the player appears when it's ready.
+            </p>
           </div>
         )
       ) : (
