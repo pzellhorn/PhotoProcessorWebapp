@@ -297,6 +297,25 @@ select {
     transition: width 0.3s ease;
 }
 
+.worker-scale {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.worker-scale button {
+    width: 2rem;
+    padding: 0.25rem 0;
+    text-align: center;
+    line-height: 1;
+}
+
+.worker-count {
+    min-width: 4.5rem;
+    font-variant-numeric: tabular-nums;
+}
+
 .progress-stats {
     display: flex;
     flex-wrap: wrap;
