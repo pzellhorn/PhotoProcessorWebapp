@@ -1,25 +1,35 @@
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { photoApi } from "../api/photoApi";
+import { videoApi } from "../api/videoApi";
 import { useJobsForMedia } from "../hooks/useJobs";
 import { useDeletePhoto } from "../hooks/useMediaItems";
+import { useMediaItem, useVideoRenditions } from "../hooks/useVideo";
 import { jobStatusLabel } from "../domain/jobStatus";
 import usePageTitle from "../hooks/usePageTitle";
 import SmartImage from "../components/SmartImage";
+import VideoPlayer from "../components/VideoPlayer";
+
+const MEDIA_TYPE_VIDEO = 2;
 
 export default function PhotoPage() {
   const { mediaId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const { data: jobs } = useJobsForMedia(mediaId);
+  const { data: mediaItem } = useMediaItem(mediaId);
   const deletePhoto = useDeletePhoto();
 
-  usePageTitle("Photo");
+  const isVideo = mediaItem?.mediaType === MEDIA_TYPE_VIDEO;
+  const { data: renditions } = useVideoRenditions(mediaId, isVideo);
+  const masterRendition = renditions?.find((r) => r.format === "hls");
+
+  usePageTitle(isVideo ? "Video" : "Photo");
 
   const backTo = location.state?.from ?? "/photos";
 
   function onDelete() {
     const confirmed = window.confirm(
-      "Delete this photo? Its faces are removed from People as well. This cannot be undone.",
+      "Delete this item? Its faces are removed from People as well. This cannot be undone.",
     );
     if (!confirmed) return;
 
@@ -33,7 +43,7 @@ export default function PhotoPage() {
           <Link className="muted" to={backTo}>
             ← Back
           </Link>
-          <h1>Photo</h1>
+          <h1>{isVideo ? "Video" : "Photo"}</h1>
         </div>
         <div className="job-chips">
           {jobs?.map((job) => (
@@ -58,22 +68,41 @@ export default function PhotoPage() {
         <p className="error-text">{deletePhoto.error.message}</p>
       )}
 
-      <SmartImage
-        className="photo-full"
-        src={photoApi.downloadUrl(mediaId)}
-        alt=""
-      />
-
-      <p>
-        <a
-          className="muted"
-          href={photoApi.downloadUrl(mediaId)}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Open original
-        </a>
-      </p>
+      {isVideo ? (
+        masterRendition ? (
+          <VideoPlayer
+            src={videoApi.streamUrl(mediaId, masterRendition.assetPath)}
+            poster={photoApi.thumbnailUrl(mediaId, 640)}
+          />
+        ) : (
+          <div className="video-processing">
+            <SmartImage
+              className="photo-full"
+              src={photoApi.thumbnailUrl(mediaId, 640)}
+              alt=""
+            />
+            <p className="muted">Transcoding… the player appears when it's ready.</p>
+          </div>
+        )
+      ) : (
+        <>
+          <SmartImage
+            className="photo-full"
+            src={photoApi.downloadUrl(mediaId)}
+            alt=""
+          />
+          <p>
+            <a
+              className="muted"
+              href={photoApi.downloadUrl(mediaId)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Open original
+            </a>
+          </p>
+        </>
+      )}
     </section>
   );
 }

@@ -3,6 +3,7 @@ import GalleryPage from "./pages/GalleryPage";
 import PhotoPage from "./pages/PhotoPage";
 import PeoplePage from "./pages/PeoplePage";
 import PersonPage from "./pages/PersonPage";
+import ProgressPage from "./pages/ProgressPage";
 
 export default function App() {
     return (
@@ -12,6 +13,7 @@ export default function App() {
                 <nav>
                     <NavLink to="/photos">Photos</NavLink>
                     <NavLink to="/people">People</NavLink>
+                    <NavLink to="/progress">Progress</NavLink>
                 </nav>
             </header>
             <main className="app-main">
@@ -21,6 +23,7 @@ export default function App() {
                     <Route path="/photos/:mediaId" element={<PhotoPage />} />
                     <Route path="/people" element={<PeoplePage />} />
                     <Route path="/people/:tagId" element={<PersonPage />} />
+                    <Route path="/progress" element={<ProgressPage />} />
                     <Route path="*" element={<Navigate to="/photos" replace />} />
                 </Routes>
             </main>
