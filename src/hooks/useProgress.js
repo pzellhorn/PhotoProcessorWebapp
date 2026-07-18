@@ -17,3 +17,12 @@ export function useBackfill() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["progress"] }),
   });
 }
+
+export function useScaleWorker() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ jobType, replicas }) => progressApi.scale(jobType, replicas),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["progress"] }),
+  });
+}

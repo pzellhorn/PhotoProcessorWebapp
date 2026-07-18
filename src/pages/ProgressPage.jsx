@@ -1,4 +1,4 @@
-import { useProgress, useBackfill } from "../hooks/useProgress";
+import { useProgress, useBackfill, useScaleWorker } from "../hooks/useProgress";
 import { jobTypeLabel, mediaTypeLabel } from "../domain/jobTypes";
 import usePageTitle from "../hooks/usePageTitle";
 
@@ -10,6 +10,7 @@ function percent(done, total) {
 export default function ProgressPage() {
     const { data, isLoading, isError, error } = useProgress();
     const backfill = useBackfill();
+    const scale = useScaleWorker();
 
     usePageTitle("Progress");
 
@@ -25,6 +26,7 @@ export default function ProgressPage() {
             {isLoading && <p className="muted">Loading progress…</p>}
             {isError && <p className="error-text">{error.message}</p>}
             {backfill.isError && <p className="error-text">{backfill.error.message}</p>}
+            {scale.isError && <p className="error-text">{scale.error.message}</p>}
             {backfill.data && (
                 <p className="muted">
                     Enqueued {backfill.data.enqueued} job{backfill.data.enqueued === 1 ? "" : "s"}.
@@ -57,6 +59,32 @@ export default function ProgressPage() {
                             <div className="progress-bar-fill" style={{ width: `${coverage}%` }} />
                         </div>
                         <span className="muted">{row.done} of {row.eligibleMedia} done ({coverage}%)</span>
+
+                        {row.scalingEnabled && (
+                            <div className="worker-scale">
+                                <span className="muted">workers</span>
+                                <button
+                                    disabled={row.replicas === 0 || scale.isPending || !row.deploymentFound}
+                                    onClick={() => scale.mutate({ jobType: row.jobType, replicas: row.replicas - 1 })}
+                                >
+                                    −
+                                </button>
+                                <span className="worker-count">
+                                    {row.replicas}
+                                    {row.readyReplicas !== row.replicas && (
+                                        <span className="muted"> ({row.readyReplicas} ready)</span>
+                                    )}
+                                </span>
+                                <button
+                                    disabled={row.replicas >= row.maxReplicas || scale.isPending || !row.deploymentFound}
+                                    onClick={() => scale.mutate({ jobType: row.jobType, replicas: row.replicas + 1 })}
+                                >
+                                    +
+                                </button>
+                                <span className="muted">max {row.maxReplicas}</span>
+                                {!row.deploymentFound && <span className="chip chip-failed">deployment not found</span>}
+                            </div>
+                        )}
 
                         <div className="progress-stats">
                             <span className="chip">queue {row.queue}</span>
