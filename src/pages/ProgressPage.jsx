@@ -57,13 +57,15 @@ export default function ProgressPage() {
                   {" "}· {row.eligibleMedia} {appliesToLabel(row.appliesTo)}
                 </span>
               </div>
-              <button
-                className="primary"
-                disabled={row.neverRun === 0 || backfill.isPending}
-                onClick={() => backfill.mutate(row.jobType)}
-              >
-                {row.neverRun === 0 ? "Nothing to run" : `Run for ${row.neverRun} missing`}
-              </button>
+              {row.neverRun > 0 && (
+                <button
+                  className="primary"
+                  disabled={backfill.isPending}
+                  onClick={() => backfill.mutate(row.jobType)}
+                >
+                  Run for {row.neverRun} missing
+                </button>
+              )}
             </div>
 
             <div className="progress-bar">
