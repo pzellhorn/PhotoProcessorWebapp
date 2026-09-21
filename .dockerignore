@@ -1,0 +1,10 @@
+node_modules
+dist
+.git
+.vscode
+.claude
+.env.development
+npm-debug.log
+# Terraform's own dir is inside the build context (context = repo root); its
+# in-use .terraform/ plugin files break the context tar ("unexpected EOF").
+terraform

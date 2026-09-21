@@ -4,6 +4,7 @@ export const JobType = {
     FaceRecognition: 1,
     VideoTranscode: 2,
     ImageEmbedding: 3,
+    VideoKeyframes: 4,
 };
 
 const jobTypeLabels = {
@@ -11,6 +12,7 @@ const jobTypeLabels = {
     [JobType.FaceRecognition]: "Face recognition",
     [JobType.VideoTranscode]: "Video transcode",
     [JobType.ImageEmbedding]: "Image embedding (CLIP)",
+    [JobType.VideoKeyframes]: "Video keyframes",
 };
 
 export function jobTypeLabel(jobType) {
@@ -22,11 +24,13 @@ export const MediaItemType = {
     None: 0,
     Photo: 1,
     Video: 2,
+    Frame: 3,
 };
 
 const mediaTypeLabels = {
     [MediaItemType.Photo]: "photos",
     [MediaItemType.Video]: "videos",
+    [MediaItemType.Frame]: "video frames",
 };
 
 export function mediaTypeLabel(mediaType) {
