@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { UPLOAD_ACCEPT } from "../domain/uploadFiles";
 
 export default function UploadButton({ upload, progress }) {
   const inputRef = useRef(null);
@@ -16,7 +17,7 @@ export default function UploadButton({ upload, progress }) {
       <input
         ref={inputRef}
         type="file"
-        accept="image/*,video/*"
+        accept={UPLOAD_ACCEPT}
         multiple
         hidden
         onChange={onFilesChosen}

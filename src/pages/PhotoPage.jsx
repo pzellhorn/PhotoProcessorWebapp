@@ -10,12 +10,24 @@ import { videoApi } from "../api/videoApi";
 import { useJobsForMedia } from "../hooks/useJobs";
 import { useDeletePhoto } from "../hooks/useMediaItems";
 import { useMediaItem, useVideoRenditions } from "../hooks/useVideo";
-import { jobStatusLabel } from "../domain/jobStatus";
+import { JobStatus, isJobActive, jobStatusLabel } from "../domain/jobStatus";
+import { JobType } from "../domain/jobTypes";
 import usePageTitle from "../hooks/usePageTitle";
 import SmartImage from "../components/SmartImage";
 import VideoPlayer from "../components/VideoPlayer";
+import FlowerPanel from "../components/FlowerPanel";
 
 const MEDIA_TYPE_VIDEO = 2;
+
+function currentFlowerJob(jobs) {
+  const flowerJobs =
+    jobs?.filter((job) => job.jobType === JobType.FlowerIdentification) ?? [];
+  return (
+    flowerJobs.find((job) => isJobActive(job.status)) ??
+    flowerJobs.find((job) => job.status === JobStatus.Done) ??
+    flowerJobs[0]
+  );
+}
 
 export default function PhotoPage() {
   const { mediaId } = useParams();
@@ -99,19 +111,15 @@ export default function PhotoPage() {
         <>
           <SmartImage
             className="photo-full"
-            src={photoApi.downloadUrl(mediaId)}
+            src={photoApi.displayUrl(mediaId)}
             alt=""
           />
           <p>
-            <a
-              className="muted"
-              href={photoApi.downloadUrl(mediaId)}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Open original
+            <a className="muted" href={photoApi.downloadUrl(mediaId)}>
+              Download original
             </a>
           </p>
+          <FlowerPanel mediaId={mediaId} flowerJob={currentFlowerJob(jobs)} />
         </>
       )}
     </section>

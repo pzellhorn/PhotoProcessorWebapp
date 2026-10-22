@@ -496,3 +496,28 @@ select {
     object-fit: cover;
     display: block;
 }
+
+/* Flowers */
+
+.flower-panel {
+    margin-top: 0.5rem;
+}
+
+.flower-name {
+    font-size: 1.15rem;
+    margin: 0 0 0.25rem;
+}
+
+.flower-panel p {
+    margin-top: 0;
+}
+
+.flower-others summary {
+    cursor: pointer;
+}
+
+.flower-others ul {
+    margin: 0.5rem 0 0;
+    padding-left: 1.25rem;
+    line-height: 1.7;
+}

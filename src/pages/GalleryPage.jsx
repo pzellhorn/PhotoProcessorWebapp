@@ -6,6 +6,7 @@ import PhotoCard, { formatTimestamp } from "../components/PhotoCard";
 import Pagination from "../components/Pagination";
 import UploadButton from "../components/UploadButton";
 import usePageTitle from "../hooks/usePageTitle";
+import { isUploadableFile, withoutRawTwins } from "../domain/uploadFiles";
 
 const PAGE_SIZE = 24;
 
@@ -36,13 +37,16 @@ export default function GalleryPage() {
 
   const uploadMutation = useUploadPhotos();
   const [progress, setProgress] = useState({ done: 0, total: 0, fraction: 0 });
+  const [skippedTwins, setSkippedTwins] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
 
   const upload = {
     isPending: uploadMutation.isPending,
     isError: uploadMutation.isError,
     error: uploadMutation.error,
-    start: (files) => {
+    start: (chosenFiles) => {
+      const files = withoutRawTwins(chosenFiles);
+      setSkippedTwins(chosenFiles.length - files.length);
       setProgress({ done: 0, total: files.length, fraction: 0 });
       uploadMutation.mutate({
         files,
@@ -59,6 +63,9 @@ export default function GalleryPage() {
       ? `${uploadResults.length - duplicateCount} uploaded` +
         (duplicateCount > 0
           ? `, ${duplicateCount} already in your library`
+          : "") +
+        (skippedTwins > 0
+          ? `, ${skippedTwins} JPEG${skippedTwins === 1 ? "" : "s"} skipped (NEF kept)`
           : "")
       : null;
 
@@ -72,8 +79,7 @@ export default function GalleryPage() {
     setIsDragging(false);
 
     const files = Array.from(event.dataTransfer?.files ?? []).filter(
-      (file) =>
-        file.type.startsWith("image/") || file.type.startsWith("video/"),
+      isUploadableFile,
     );
     if (files.length > 0) {
       upload.start(files);

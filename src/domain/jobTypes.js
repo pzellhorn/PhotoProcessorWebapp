@@ -5,6 +5,7 @@ export const JobType = {
     VideoTranscode: 2,
     ImageEmbedding: 3,
     VideoKeyframes: 4,
+    FlowerIdentification: 5,
 };
 
 const jobTypeLabels = {
@@ -13,6 +14,7 @@ const jobTypeLabels = {
     [JobType.VideoTranscode]: "Video transcode",
     [JobType.ImageEmbedding]: "Image embedding (CLIP)",
     [JobType.VideoKeyframes]: "Video keyframes",
+    [JobType.FlowerIdentification]: "Flower identification (BioCLIP)",
 };
 
 export function jobTypeLabel(jobType) {

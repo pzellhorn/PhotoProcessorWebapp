@@ -11,6 +11,7 @@ export const photoApi = {
     httpClient.get("/api/Photo/ListLibrary", { page, pageSize }),
 
   downloadUrl: (mediaId) => httpClient.url("/api/Photo/Download", { mediaId }),
+  displayUrl: (mediaId) => httpClient.url("/api/Photo/Display", { mediaId }),
 
   thumbnailUrl: (mediaId, width = 320) =>
     httpClient.url("/api/Photo/Thumbnail", { mediaId, width }),
